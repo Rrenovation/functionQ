@@ -14,32 +14,13 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(Qt5 COMPONENTS Core Network REQUIRED)
 
-add_executable(functionQ
-  main.cpp
-  functionQ.h
-  functionQ.cpp
-  ./scrcpy/decoder/tcpserver.h
-  ./scrcpy/decoder/tcpserver.cpp
-  ./scrcpy/decoder/videosocket.h
-  ./scrcpy/decoder/videosocket.cpp
-  ./scrcpy/decoder/stream.h
-  ./scrcpy/decoder/stream.cpp
-  ./scrcpy/decoder/videobuffer.h
-  ./scrcpy/decoder/videobuffer.cpp
-  ./scrcpy/decoder/decoder.h
-  ./scrcpy/decoder/decoder.cpp
-  ./scrcpy/decoder/avframeconvert.h
-  ./scrcpy/decoder/avframeconvert.cpp
-  ./scrcpy/decoder/adbprocess.h
-  ./scrcpy/decoder/adbprocess.cpp
-  ./scrcpy/controller/qscrcpyevent.h
-  ./scrcpy/controller/controlmsg.h
-  ./scrcpy/controller/controlmsg.cpp
-  ./scrcpy/controller/bufferutil.h
-  ./scrcpy/controller/bufferutil.cpp
-  ./scrcpy/controller/controller.h
-  ./scrcpy/controller/controller.cpp
-  ./scrcpy/controller/action.h
-  ./scrcpy/controller/action.cpp
+aux_source_directory(${PROJECT_SOURCE_DIR} SrcList)
+aux_source_directory(${PROJECT_SOURCE_DIR}/scrcpy/decoder DecoderList)
+aux_source_directory(${PROJECT_SOURCE_DIR}/scrcpy/controller ControllerList)
+
+add_executable(${PROJECT_NAME}
+  ${SrcList}
+  ${DecoderList}
+  ${ControllerList}
 )
 target_link_libraries(functionQ Qt5Core Qt5::Network avcodec avformat avutil swscale )
