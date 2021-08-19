@@ -35,13 +35,11 @@ int main(int argc, char *argv[])
 {
     QCoreApplication *QApp = new QCoreApplication(argc, argv);
 
-    auto mServer = new Server();
-    mServer->startServer();
-
-    auto device = new myDevice();
-    device->setDeviceName("12.168.1.45:5555");
-
-    mServer->pushDevice(device);
+    Server mServer;
+    mServer.startServer();
+    myDevice device;
+    device.setDeviceName("12.168.1.45:5555");
+    mServer.pushDevice(&device);
 
     return QApp->exec();
 }
