@@ -120,7 +120,7 @@ void Stream::stopDecode()
     {
         m_decoder->interrupt();
     }
-    wait(2);
+    wait();
 }
 
 void Stream::run()

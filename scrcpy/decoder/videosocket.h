@@ -32,22 +32,22 @@ private:
     bool m_quit = false;
 };
 
-class QScrcpyEvent : public QEvent
+class QScrcpyVideoEvent : public QEvent
 {
 public:
     enum Type
     {
-        VideoSocket = QEvent::User + 1,
+        VideoSocket = QEvent::User + 2,
         Control,
     };
-    QScrcpyEvent(Type type) : QEvent(QEvent::Type(type)) {}
+    QScrcpyVideoEvent(Type type) : QEvent(QEvent::Type(type)) {}
 };
 
 // VideoSocketEvent
-class VideoSocketEvent : public QScrcpyEvent
+class VideoSocketEvent : public QScrcpyVideoEvent
 {
 public:
-    VideoSocketEvent() : QScrcpyEvent(VideoSocket) {}
+    VideoSocketEvent() : QScrcpyVideoEvent(VideoSocket) {}
 };
 
 

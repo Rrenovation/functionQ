@@ -15,11 +15,13 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(Qt5 COMPONENTS Core Network REQUIRED)
 
 aux_source_directory(${PROJECT_SOURCE_DIR} SrcList)
+aux_source_directory(${PROJECT_SOURCE_DIR}/scrcpy DeviceList)
 aux_source_directory(${PROJECT_SOURCE_DIR}/scrcpy/decoder DecoderList)
 aux_source_directory(${PROJECT_SOURCE_DIR}/scrcpy/controller ControllerList)
 
 add_executable(${PROJECT_NAME}
   ${SrcList}
+  ${DeviceList}
   ${DecoderList}
   ${ControllerList}
 )

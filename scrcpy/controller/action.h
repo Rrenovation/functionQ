@@ -5,11 +5,11 @@
 #include "keycodes.h"
 
 class Controller;
-class Action
+class Action 
 {
 public:
     Action();
-    ~Action();
+    virtual ~Action();
     void setCtl(Controller *ctl);
     void sendText(QString text);
 

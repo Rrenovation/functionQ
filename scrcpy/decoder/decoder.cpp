@@ -113,13 +113,14 @@ void Decoder::pushFrame()
         return;
     }
 
-    static qint32 i = 1;
-    m_vb->lock();
-    const AVFrame *m_pFrame = m_vb->consumeRenderedFrame();
-    AVFrame *rgbFrame = avFrameConvertPixelFormat(m_pFrame, AV_PIX_FMT_BGR24);
-    qInfo()<<"onNewFrame!";
+    //m_vb->lock();
+    //const AVFrame *m_pFrame = m_vb->consumeRenderedFrame();
+    //AVFrame *rgbFrame = avFrameConvertPixelFormat(m_pFrame, AV_PIX_FMT_BGR24);
+    //qInfo()<<"wait for consume frame !";
     emit onNewFrame();
-    m_vb->unLock();
+
+    //emit onNewFrame();
+    //m_vb->unLock();
 }
 
 AVFrame *Decoder::avFrameConvertPixelFormat(const AVFrame *src, AVPixelFormat dstFormat)

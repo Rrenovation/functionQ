@@ -4,6 +4,15 @@
 #include <QMutex>
 #include <QWaitCondition>
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+#include "libavutil/pixfmt.h"
+#ifdef __cplusplus
+}
+#endif
+
 // forward declarations
 typedef struct AVFrame AVFrame;
 
@@ -32,6 +41,11 @@ public:
 
     const AVFrame *peekRenderedFrame();
 
+    const AVFrame *consumeRenderedFrame(AVPixelFormat format);
+    
+    const AVFrame *ConvertPixelFormat(const AVFrame *srcFrame, AVPixelFormat format);
+
+    const uint8_t *getFrameBuff();
     // wake up and avoid any blocking call
     void interrupt();
 
@@ -42,6 +56,7 @@ private:
     AVFrame *m_decodingFrame = Q_NULLPTR;
     AVFrame *m_renderingframe = Q_NULLPTR;
     AVFrame *m_pFrameRGB = Q_NULLPTR;
+    uint8_t *m_pFrameBuff = Q_NULLPTR;
     QMutex m_mutex;
     bool m_renderingFrameConsumed = true;
 

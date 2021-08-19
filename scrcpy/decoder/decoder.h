@@ -28,7 +28,6 @@ public:
     void interrupt();
 signals:
     void onNewFrame();
-
 protected:
     AVFrame *avFrameConvertPixelFormat(const AVFrame *src, AVPixelFormat dstFormat);
     void pushFrame();

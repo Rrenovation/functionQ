@@ -1,0 +1,49 @@
+#ifndef DEVICEINFO_H
+#define DEVICEINFO_H
+
+#include <QtCore>
+#include "./controller/action.h"
+
+class Decoder;
+class Stream;
+class VideoBuffer;
+class VideoSocket;
+class Adbprocess;
+class QTcpSocket;
+class Controller;
+
+// forward declarations
+typedef struct AVFrame AVFrame;
+
+class Device : public QObject
+{
+    Q_OBJECT
+private:
+    QString deviceName;
+    Decoder *decoder = Q_NULLPTR;
+    Stream *stream = Q_NULLPTR;
+    VideoSocket *videoSocket = Q_NULLPTR;
+    VideoBuffer *videoBuffer = Q_NULLPTR;
+    Adbprocess *adbprocess = Q_NULLPTR;
+    Controller *controller = Q_NULLPTR;
+    Action *action = Q_NULLPTR;
+    const AVFrame *frame = Q_NULLPTR;
+    /* data */
+private slots:
+    void consumeNewFrame();
+
+public:
+    Device(/* args */);
+    ~Device();
+    void setVideoSocket(VideoSocket *videoSocket);
+    void setDeviceSocket(QTcpSocket *socket);
+    void setDeviceName(QString deviceName);
+    virtual void consumeFrame();
+    QString getDeviceName();
+    Action *getAction();
+    const uint8_t *getFrameBuffer();
+    const int getRows();
+    const int getCols();
+};
+
+#endif

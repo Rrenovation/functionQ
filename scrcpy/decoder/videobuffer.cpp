@@ -6,6 +6,8 @@ extern "C"
 #endif
 #include "libavformat/avformat.h"
 #include "libavutil/avutil.h"
+#include "libswscale/swscale.h"
+#include "libavutil/imgutils.h"
 #ifdef __cplusplus
 }
 #endif
@@ -63,6 +65,12 @@ void VideoBuffer::deInit()
     {
         av_frame_free(&m_pFrameRGB);
         m_pFrameRGB = Q_NULLPTR;
+
+        if (m_pFrameBuff)
+        {
+            av_free(m_pFrameBuff);
+            m_pFrameBuff = Q_NULLPTR;
+        }
     }
 }
 
@@ -112,6 +120,53 @@ const AVFrame *VideoBuffer::consumeRenderedFrame()
         m_renderingFrameConsumedCond.wakeOne();
     }
     return m_renderingframe;
+}
+
+const AVFrame *VideoBuffer::consumeRenderedFrame(AVPixelFormat format)
+{
+    ConvertPixelFormat(consumeRenderedFrame(), format);
+    return m_pFrameRGB;
+}
+
+const uint8_t *VideoBuffer::getFrameBuff()
+{
+    return m_pFrameBuff;
+}
+
+const AVFrame *VideoBuffer::ConvertPixelFormat(const AVFrame *srcFrame, AVPixelFormat format)
+{
+    int width = srcFrame->width;
+    int height = srcFrame->height;
+
+    if (!m_pFrameBuff)
+    {
+        m_pFrameBuff =(uint8_t*) av_malloc(av_image_get_buffer_size(format, width, height, 1) * sizeof(uint8_t));
+    }
+    else
+    {
+        av_realloc(m_pFrameBuff, av_image_get_buffer_size(format, width, height, 1) * sizeof(uint8_t));
+    }
+
+    av_image_fill_arrays(m_pFrameRGB->data, m_pFrameRGB->linesize, m_pFrameBuff, (AVPixelFormat)format, width, height, 1);
+
+    SwsContext *conversion = sws_getContext(width,
+                                            height,
+                                            (AVPixelFormat)srcFrame->format,
+                                            width,
+                                            height,
+                                            (AVPixelFormat)format,
+                                            SWS_FAST_BILINEAR,
+                                            NULL,
+                                            NULL,
+                                            NULL);
+    sws_scale(conversion, srcFrame->data, srcFrame->linesize, 0, height, m_pFrameRGB->data, m_pFrameRGB->linesize);
+    sws_freeContext(conversion);
+
+    m_pFrameRGB->format = format;
+    m_pFrameRGB->width = width;
+    m_pFrameRGB->height = height;
+
+    return m_pFrameRGB;
 }
 
 const AVFrame *VideoBuffer::peekRenderedFrame()
