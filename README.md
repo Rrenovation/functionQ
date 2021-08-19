@@ -1,7 +1,7 @@
 #functionQ
 ===========================
 
-functionQ adb连接Android设备，获取显示图像和控制。不需要root权限。
+functionQ 一个远程控制安卓设备的通用库。通过adb连接Android设备，获取图像数据和对设备控制。
 
 ### Ubuntu 环境依赖
 ```shell
@@ -34,10 +34,19 @@ public:
     ~myDevice()
     {
     }
+    //新的一帧消息
     virtual void consumeFrame()
     {
         qInfo() << "onNewFrame";
+        //提取图像数据 (uint_8t*)
+        auto frame = getFrameBuffer();
+        //宽
+        auto width = getRows();
+        //高
+        auto height = getCols();
+        //获取控制对象        
         auto action = getAction();
+        //返回桌面
         action->goHome();
     }
 };
@@ -50,7 +59,7 @@ int main(int argc, char *argv[])
     mServer->startServer();
 
     auto device = new myDevice();
-    
+
     device->setDeviceName("127.0.0.1:5555");
 
     mServer->pushDevice(device);
