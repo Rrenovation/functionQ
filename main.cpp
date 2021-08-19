@@ -2,6 +2,7 @@
 
 #include "../scrcpy/server.h"
 #include "../scrcpy/device.h"
+#include "../scrcpy/controller/action.h"
 
 class myDevice : public Device
 {

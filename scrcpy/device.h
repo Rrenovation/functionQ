@@ -2,7 +2,6 @@
 #define DEVICEINFO_H
 
 #include <QtCore>
-#include "./controller/action.h"
 
 class Decoder;
 class Stream;
@@ -11,7 +10,7 @@ class VideoSocket;
 class Adbprocess;
 class QTcpSocket;
 class Controller;
-
+class Action;
 // forward declarations
 typedef struct AVFrame AVFrame;
 

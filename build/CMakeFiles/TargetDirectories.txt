@@ -1,0 +1,4 @@
+/home/gitfunctionQ/functionQ/build/CMakeFiles/rebuild_cache.dir
+/home/gitfunctionQ/functionQ/build/CMakeFiles/edit_cache.dir
+/home/gitfunctionQ/functionQ/build/CMakeFiles/functionQ.dir
+/home/gitfunctionQ/functionQ/build/CMakeFiles/functionQ_autogen.dir

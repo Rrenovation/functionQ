@@ -8,7 +8,7 @@
 #include "./decoder/videosocket.h"
 #include "./decoder/videobuffer.h"
 #include "./controller/controller.h"
-
+#include "./controller/action.h"
 
 Device::Device(/* args */)
 {
