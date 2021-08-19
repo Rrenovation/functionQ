@@ -38,7 +38,7 @@ public:
     virtual void consumeFrame()
     {
         qInfo() << "onNewFrame";
-        //提取图像数据 (uint_8t*)
+        //提取图像数据 (uint_8t*) RGB24 
         auto frame = getFrameBuffer();
         //宽
         auto width = getRows();
