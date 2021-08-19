@@ -60,13 +60,20 @@ int main(int argc, char *argv[])
 
     auto device = new myDevice();
 
-    device->setDeviceName("127.0.0.1:5555");
+    device->setDeviceName("12.168.1.45:5555");
 
     mServer->pushDevice(device);
 
     return QApp->exec();
 }
 ````
+### 启动 Android 控制软件
+``` shell
+    adb connect 12.168.1.45:5555
+    adb -s 12.168.1.45:5555 push scrcpy-server /data/local/tmp/scrcpy-server
+    adb -s 12.168.1.45:5555 reverse localabstract:scrcpy tcp:37321
+    adb -s 12.168.1.45:5555 shell CLASSPATH=/data/local/tmp/scrcpy-server app_process / com.genymobile.scrcpy.Server 1.18 info 0 20000000 4 -1 false - true true 0 false false - - 12.168.1.45:5555
+```
 
 ## 参考
 ---
