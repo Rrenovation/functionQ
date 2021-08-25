@@ -25,6 +25,15 @@ void Action::sendText(QString text)
     ctlmsg->setInjectTextMsgData(text);
     ctl->postControlEvent(ctlmsg);
 }
+void Action::sendTextEx(QString text)
+{
+    if (!isSetCtl)
+        return;
+    ControlMsg *ctlmsg = new ControlMsg(ControlMsg::CMT_SET_CLIPBOARD);
+    ctlmsg->setSetClipboardMsgData(text,true);
+    ctl->postControlEvent(ctlmsg);    
+}
+
 
 // msec单位毫秒
 void Action::sleep(unsigned int msec)

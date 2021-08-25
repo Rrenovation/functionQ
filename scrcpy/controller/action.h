@@ -12,6 +12,7 @@ public:
     virtual ~Action();
     void setCtl(Controller *ctl);
     void sendText(QString text);
+    void sendTextEx(QString text);
 
     void click(QRect position);
     void clickHold(QRect position);
