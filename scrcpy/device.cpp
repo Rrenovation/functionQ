@@ -1,6 +1,5 @@
 #include "device.h"
 
-#include "./decoder/adbprocess.h"
 #include "./decoder/decoder.h"
 #include "./decoder/avframeconvert.h"
 #include "./decoder/tcpserver.h"
@@ -17,7 +16,6 @@ Device::Device(/* args */)
     decoder = new Decoder(videoBuffer);
     stream = new Stream();
     action = new Action();
-
     stream->setDecoder(decoder);
 
     connect(decoder, &Decoder::onNewFrame, this, &Device::consumeNewFrame, Qt::DirectConnection);

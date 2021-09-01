@@ -7,7 +7,6 @@ class Decoder;
 class Stream;
 class VideoBuffer;
 class VideoSocket;
-class Adbprocess;
 class QTcpSocket;
 class Controller;
 class Action;
@@ -23,7 +22,6 @@ private:
     Stream *stream = Q_NULLPTR;
     VideoSocket *videoSocket = Q_NULLPTR;
     VideoBuffer *videoBuffer = Q_NULLPTR;
-    Adbprocess *adbprocess = Q_NULLPTR;
     Controller *controller = Q_NULLPTR;
     Action *action = Q_NULLPTR;
     const AVFrame *frame = Q_NULLPTR;
@@ -33,7 +31,7 @@ private slots:
 
 public:
     Device(/* args */);
-    ~Device();
+    virtual ~Device();
     void setVideoSocket(VideoSocket *videoSocket);
     void setDeviceSocket(QTcpSocket *socket);
     void setDeviceName(QString deviceName);

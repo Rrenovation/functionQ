@@ -18,7 +18,7 @@ functionQ 一个远程控制安卓设备的通用库。通过adb连接Android设
 ### 简单应用: main.cpp
 ```cpp
 #include <QCoreApplication>
-
+#include "../scrcpy/adbprocess.h"
 #include "../scrcpy/server.h"
 #include "../scrcpy/device.h"
 #include "../scrcpy/controller/action.h"
@@ -34,11 +34,10 @@ public:
     ~myDevice()
     {
     }
-    //新的一帧消息
     virtual void consumeFrame()
     {
         qInfo() << "onNewFrame";
-        //提取图像数据 (uint_8t*) RGB24 
+        //提取图像数据 (uint_8t*)
         auto frame = getFrameBuffer();
         //宽
         auto width = getRows();
@@ -54,14 +53,25 @@ public:
 int main(int argc, char *argv[])
 {
     QCoreApplication *QApp = new QCoreApplication(argc, argv);
-
+    Adbprocess adbScrpy,autouimator;
     Server mServer;
+    myDevice device;
+
     mServer.startServer();
 
-    myDevice device;
-    device.setDeviceName("12.168.1.45:5555");
-    
+    adbScrpy.setAdbPatch("/home/qtubuntu/Android/Sdk/platform-tools/adb");
+    adbScrpy.setSerial("12.168.1.47:5555");
+
+    autouimator.setAdbPatch("/home/qtubuntu/Android/Sdk/platform-tools/adb");
+    autouimator.setSerial("12.168.1.47:5555");
+
+    device.setDeviceName("12.168.1.47:5555");
     mServer.pushDevice(&device);
+
+    while (!adbScrpy.autoConnect()) //自动连接
+        ;
+
+    qInfo()<<autouimator.uiautomator();
 
     return QApp->exec();
 }

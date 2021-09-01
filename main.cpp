@@ -1,5 +1,5 @@
 #include <QCoreApplication>
-
+#include "../scrcpy/adbprocess.h"
 #include "../scrcpy/server.h"
 #include "../scrcpy/device.h"
 #include "../scrcpy/controller/action.h"
@@ -34,12 +34,25 @@ public:
 int main(int argc, char *argv[])
 {
     QCoreApplication *QApp = new QCoreApplication(argc, argv);
-
+    Adbprocess adbScrpy,autouimator;
     Server mServer;
-    mServer.startServer();
     myDevice device;
-    device.setDeviceName("12.168.1.45:5555");
+
+    mServer.startServer();
+
+    adbScrpy.setAdbPatch("/home/qtubuntu/Android/Sdk/platform-tools/adb");
+    adbScrpy.setSerial("12.168.1.47:5555");
+
+    autouimator.setAdbPatch("/home/qtubuntu/Android/Sdk/platform-tools/adb");
+    autouimator.setSerial("12.168.1.47:5555");
+
+    device.setDeviceName("12.168.1.47:5555");
     mServer.pushDevice(&device);
+
+    while (!adbScrpy.autoConnect()) //自动连接
+        ;
+
+    qInfo()<<autouimator.uiautomator();
 
     return QApp->exec();
 }
