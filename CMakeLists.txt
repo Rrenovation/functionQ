@@ -14,6 +14,12 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(Qt5 COMPONENTS Core Network REQUIRED)
 
+if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /SAFESEH:NO")
+	include_directories(${PROJECT_SOURCE_DIR}\\thrid_party\\ffmpeg\\include)
+	link_directories(${PROJECT_SOURCE_DIR}\\thrid_party\\ffmpeg\\lib)
+endif()
+
 aux_source_directory(${PROJECT_SOURCE_DIR} SrcList)
 aux_source_directory(${PROJECT_SOURCE_DIR}/scrcpy DeviceList)
 aux_source_directory(${PROJECT_SOURCE_DIR}/scrcpy/decoder DecoderList)
@@ -25,4 +31,4 @@ add_executable(${PROJECT_NAME}
   ${DecoderList}
   ${ControllerList}
 )
-target_link_libraries(functionQ Qt5Core Qt5::Network avcodec avformat avutil swscale )
+target_link_libraries(functionQ Qt5::Core Qt5::Network avcodec avformat avutil swscale )

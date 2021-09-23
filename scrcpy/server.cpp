@@ -5,6 +5,8 @@
 #include "./decoder/videosocket.h"
 #include "./controller/controller.h"
 
+#define DEVICE_NAME_FIELD_LENGTH 128
+
 Server::Server(/* args */)
 {
     if (!Stream::init())

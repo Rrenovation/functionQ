@@ -24,7 +24,6 @@ private:
     TcpServer *mServer = Q_NULLPTR;
     QMap<QString,QPointer<Device>> deviceList;
     bool readInfo(VideoSocket *videoSocket, QString &deviceName, QSize &size);
-    const quint16 DEVICE_NAME_FIELD_LENGTH = 128;
     QString LastDevName;
 };
 

@@ -1,4 +1,4 @@
-#include <QCoreApplication>
+﻿#include <QCoreApplication>
 #include "../scrcpy/adbprocess.h"
 #include "../scrcpy/server.h"
 #include "../scrcpy/device.h"
