@@ -35,7 +35,8 @@ private:
     /* data */
 private slots:
     void consumeNewFrame();
-
+signals:
+    void newFrame();
 public:
     Device(/* args */);
     virtual ~Device();

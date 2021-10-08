@@ -70,6 +70,7 @@ void Device::consumeNewFrame()
     frame->height = AVFrame->height;
     frame->width = AVFrame->width;
     consumeFrame();
+    emit newFrame();
     videoBuffer->unLock();
 }
 
