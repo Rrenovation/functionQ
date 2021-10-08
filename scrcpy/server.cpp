@@ -7,7 +7,7 @@
 
 #define DEVICE_NAME_FIELD_LENGTH 128
 
-Server::Server(/* args */)
+Server::Server(QObject *parent) : QObject(parent)
 {
     if (!Stream::init())
     {

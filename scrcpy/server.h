@@ -12,7 +12,7 @@ class Server : public QObject
 {
     Q_OBJECT
 public:
-    Server(/* args */);
+    Server(QObject *parent = nullptr);
     ~Server();
     bool startServer(int port = 37321);
     void pushDevice(Device *device);
