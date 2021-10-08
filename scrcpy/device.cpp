@@ -16,6 +16,8 @@ Device::Device(/* args */)
     decoder = new Decoder(videoBuffer);
     stream = new Stream();
     action = new Action();
+    frame = new Frame();
+
     stream->setDecoder(decoder);
 
     connect(decoder, &Decoder::onNewFrame, this, &Device::consumeNewFrame, Qt::DirectConnection);
@@ -35,6 +37,7 @@ Device::~Device()
     delete stream;
     delete decoder;
     delete videoBuffer;
+    delete frame;
 }
 
 QString Device::getDeviceName()
@@ -62,9 +65,11 @@ void Device::setDeviceSocket(QTcpSocket *socket)
 void Device::consumeNewFrame()
 {
     videoBuffer->lock();
-    frame = videoBuffer->consumeRenderedFrame(AV_PIX_FMT_RGB24);
+    auto AVFrame = videoBuffer->consumeRenderedFrame(AV_PIX_FMT_RGB24);
+    frame->data = AVFrame->data[0];
+    frame->height = AVFrame->height;
+    frame->width = AVFrame->width;
     consumeFrame();
-    qInfo() << frame->width << "--" << frame->height;
     videoBuffer->unLock();
 }
 
@@ -83,17 +88,7 @@ Action *Device::getAction()
     return action;
 }
 
-const uint8_t *Device::getFrameBuffer()
+const Frame *Device::getFrame()
 {
-    return frame->data[0];
-}
-
-const int Device::getRows()
-{
-    return frame->width;
-}
-
-const int Device::getCols()
-{
-    return frame->height;
+    return frame;
 }

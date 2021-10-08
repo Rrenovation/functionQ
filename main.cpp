@@ -18,12 +18,8 @@ public:
     virtual void consumeFrame()
     {
         qInfo() << "onNewFrame";
-        //提取图像数据 (uint_8t*)
-        auto frame = getFrameBuffer();
-        //宽
-        auto width = getRows();
-        //高
-        auto height = getCols();
+        auto frame = getFrame();
+
         //获取控制对象        
         auto action = getAction();
         //返回桌面

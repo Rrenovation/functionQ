@@ -3,6 +3,8 @@
 
 #include <QtCore>
 
+// forward declarations
+
 class Decoder;
 class Stream;
 class VideoBuffer;
@@ -10,8 +12,13 @@ class VideoSocket;
 class QTcpSocket;
 class Controller;
 class Action;
-// forward declarations
-typedef struct AVFrame AVFrame;
+
+struct Frame
+{
+    uint8_t *data = Q_NULLPTR;
+    int width;
+    int height;
+};
 
 class Device : public QObject
 {
@@ -24,7 +31,7 @@ private:
     VideoBuffer *videoBuffer = Q_NULLPTR;
     Controller *controller = Q_NULLPTR;
     Action *action = Q_NULLPTR;
-    const AVFrame *frame = Q_NULLPTR;
+    Frame *frame = Q_NULLPTR;
     /* data */
 private slots:
     void consumeNewFrame();
@@ -38,9 +45,7 @@ public:
     virtual void consumeFrame();
     QString getDeviceName();
     Action *getAction();
-    const uint8_t *getFrameBuffer();
-    const int getRows();
-    const int getCols();
+    const Frame *getFrame();
 };
 
 #endif
