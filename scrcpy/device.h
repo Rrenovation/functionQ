@@ -37,8 +37,9 @@ private slots:
     void consumeNewFrame();
 signals:
     void newFrame();
+
 public:
-    Device(/* args */);
+    Device(QObject *parent = nullptr);
     virtual ~Device();
     void setVideoSocket(VideoSocket *videoSocket);
     void setDeviceSocket(QTcpSocket *socket);

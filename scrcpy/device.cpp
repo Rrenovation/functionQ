@@ -9,7 +9,7 @@
 #include "./controller/controller.h"
 #include "./controller/action.h"
 
-Device::Device(/* args */)
+Device::Device(QObject *parent): QObject(parent)
 {
     videoBuffer = new VideoBuffer();
     videoBuffer->init();

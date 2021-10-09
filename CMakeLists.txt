@@ -16,12 +16,12 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
   set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /SAFESEH:NO")
   set(CMAKE_SHARED_LINKER_FLAGS_RELEASE "${CMAKE_SHARED_LINKR_FLAGS} /SAFESEH:NO")
-  add_compile_options(
-    $<$<CONFIG:>:/MT> #---------|
-    $<$<CONFIG:Debug>:/MTd> #---|-- Statically link the runtime libraries
-    $<$<CONFIG:Release>:/MT> #--|
-  )
-  set(Qt5_DIR E:\\qt5_static\\lib\\cmake\\Qt5)
+  # add_compile_options(
+  #   $<$<CONFIG:>:/MT> #---------|
+  #   $<$<CONFIG:Debug>:/MTd> #---|-- Statically link the runtime libraries
+  #   $<$<CONFIG:Release>:/MT> #--|
+  # )
+  # set(Qt5_DIR E:\\qt5_static\\lib\\cmake\\Qt5) Statically link patch
 	include_directories(${PROJECT_SOURCE_DIR}\\thrid_party\\ffmpeg\\include)
 	link_directories(${PROJECT_SOURCE_DIR}\\thrid_party\\ffmpeg\\lib)
   
