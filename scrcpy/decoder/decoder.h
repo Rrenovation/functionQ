@@ -35,7 +35,6 @@ protected:
 private:
     VideoBuffer *m_vb = Q_NULLPTR;
     AVCodecContext *m_codecCtx = Q_NULLPTR;
-    AVPicture *rgbDecoderFrame = Q_NULLPTR;
     uint8_t *p_global_bgr_buffer = Q_NULLPTR;
     bool m_isCodecCtxOpen = false;
 };

@@ -65,7 +65,7 @@ void Device::setDeviceSocket(QTcpSocket *socket)
 void Device::consumeNewFrame()
 {
     videoBuffer->lock();
-    auto AVFrame = videoBuffer->consumeRenderedFrame(AV_PIX_FMT_RGB24);
+    auto AVFrame = videoBuffer->consumeRenderedFrame(AV_PIX_FMT_BGR24);
     frame->data = AVFrame->data[0];
     frame->height = AVFrame->height;
     frame->width = AVFrame->width;

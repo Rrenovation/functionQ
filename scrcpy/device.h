@@ -46,6 +46,7 @@ public:
     void setDeviceName(QString deviceName);
     virtual void consumeFrame();
     QString getDeviceName();
+    
     Action *getAction();
     const Frame *getFrame();
 };
