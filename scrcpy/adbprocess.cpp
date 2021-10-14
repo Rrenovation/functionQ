@@ -8,7 +8,6 @@
 
 Adbprocess::Adbprocess(QObject *parent, QString Serial) : QProcess(parent), mSerial(Serial)
 {
-    
 }
 
 Adbprocess::~Adbprocess()
@@ -58,10 +57,8 @@ bool Adbprocess::connectDevice()
     adbArgs << "connect";
     adbArgs << mSerial;
 
-
     start(adbPath, adbArgs);
     waitForFinished();
-
 
     if (readAllStandardOutput().contains("already connected"))
     {
@@ -104,7 +101,7 @@ bool Adbprocess::push(const QString &local, const QString &remote)
     return false;
 }
 
-bool Adbprocess::appprocess()
+bool Adbprocess::appprocess(QString fps)
 {
     QStringList adbArgs;
 
@@ -119,7 +116,7 @@ bool Adbprocess::appprocess()
     adbArgs << "info";
     adbArgs << "0";
     adbArgs << "20000000";
-    adbArgs << "4"; //FPS
+    adbArgs << fps; //FPS
     adbArgs << "-1";
     adbArgs << "false";
     adbArgs << "-";

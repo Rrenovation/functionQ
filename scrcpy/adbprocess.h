@@ -37,7 +37,7 @@ public:
     bool connectDevice();
     void reverse(const QString &deviceSocketName, quint16 localPort);
     bool push(const QString &local, const QString &remote);
-    bool appprocess();
+    bool appprocess(QString fps = "5");
 
     void startapplication(QString application); //adb shell am start -n 包名/类名 adb shell am start -n 包名/包名.MainActivity 
     void killapplication(QString application);  //adb shell am force-stop 包名
