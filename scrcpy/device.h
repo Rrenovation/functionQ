@@ -3,7 +3,7 @@
 
 #include <QtCore>
 
-// forward declarations
+
 
 class Decoder;
 class Stream;
@@ -15,7 +15,7 @@ class Action;
 
 struct Frame
 {
-    uint8_t *data = Q_NULLPTR;
+    const uint8_t *data = Q_NULLPTR;
     int width;
     int height;
 };
@@ -25,14 +25,12 @@ class Device : public QObject
     Q_OBJECT
 private:
     QString deviceName;
-    Decoder *decoder = Q_NULLPTR;
-    Stream *stream = Q_NULLPTR;
-    VideoSocket *videoSocket = Q_NULLPTR;
-    VideoBuffer *videoBuffer = Q_NULLPTR;
-    Controller *controller = Q_NULLPTR;
-    Action *action = Q_NULLPTR;
-    Frame *frame = Q_NULLPTR;
-    /* data */
+    QPointer<Decoder> decoder;
+    QPointer<Stream> stream;
+    QPointer<Controller> controller;
+    std::shared_ptr<Action> action;
+    std::shared_ptr<Frame> frame;
+
 private slots:
     void consumeNewFrame();
 signals:
@@ -45,10 +43,9 @@ public:
     void setDeviceSocket(QTcpSocket *socket);
     void setDeviceName(QString deviceName);
     virtual void consumeFrame();
-    QString getDeviceName();
-    
-    Action *getAction();
-    const Frame *getFrame();
+    const QString getDeviceName();
+    std::shared_ptr<Action> getAction();
+    std::shared_ptr<Frame> getFrame();
 };
 
 #endif

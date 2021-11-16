@@ -7,41 +7,19 @@
 
 #define DEVICE_NAME_FIELD_LENGTH 128
 
-Server::Server(QObject *parent) : QObject(parent)
+Server::Server(QObject *parent) : QObject(parent), mServer(new TcpServer())
 {
-    if (!Stream::init())
-    {
-        qInfo() << "Stream Init fail !";
-        return;
-    }
+    connect(mServer, &TcpServer::newConnection, this, &Server::onNewConnect);
 }
 
 Server::~Server()
 {
     Stream::deInit();
-    mServer->close();
-    delete mServer;
 }
 
 bool Server::startServer(int port)
 {
-    if (mServer == Q_NULLPTR)
-    {
-        mServer = new TcpServer();
-        if (mServer == Q_NULLPTR)
-        {
-            return false;
-        }
-    }
-    if (!mServer->listen(QHostAddress::Any, port))
-    {
-        qInfo() << "server listen " << port << " fail!";
-        delete mServer;
-        mServer = Q_NULLPTR;
-        return false;
-    }
-    connect(mServer, &TcpServer::newConnection, this, &Server::onNewConnect);
-    return true;
+    return mServer->listen(QHostAddress::Any, port) && Stream::init();
 }
 
 void Server::onNewConnect()
@@ -110,9 +88,9 @@ bool Server::readInfo(VideoSocket *videoSocket, QString &deviceName, QSize &size
     return true;
 }
 
-void Server::pushDevice(Device *device)
+void Server::pushDevice(QPointer<Device> device)
 {
-    deviceList[device->getDeviceName()] = QPointer<Device>(device);
+    deviceList[device->getDeviceName()] = device;
 }
 void Server::popDevice(QString deviceName)
 {

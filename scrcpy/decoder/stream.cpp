@@ -69,7 +69,7 @@ void Stream::deInit()
 
 void Stream::setDecoder(Decoder *decoder)
 {
-    m_decoder = decoder;
+    m_decoder = QPointer<Decoder>(decoder);
 }
 
 static quint32 bufferRead32be(quint8 *buf)

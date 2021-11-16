@@ -49,7 +49,7 @@ protected:
 private:
     QPointer<VideoSocket> m_videoSocket;
     // for recorder
-    Decoder *m_decoder = Q_NULLPTR;
+    QPointer<Decoder> m_decoder;
     AVCodecContext *m_codecCtx = Q_NULLPTR;
     AVCodecParserContext *m_parser = Q_NULLPTR;
     // successive packets may need to be concatenated, until a non-config

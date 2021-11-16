@@ -9,47 +9,28 @@
 #include "./controller/controller.h"
 #include "./controller/action.h"
 
-Device::Device(QObject *parent): QObject(parent)
+Device::Device(QObject *parent) : QObject(parent), decoder(new Decoder()) ,stream( new Stream()),action(new Action),frame(new Frame())
 {
-    videoBuffer = new VideoBuffer();
-    videoBuffer->init();
-    decoder = new Decoder(videoBuffer);
-    stream = new Stream();
-    action = new Action();
-    frame = new Frame();
-
-    stream->setDecoder(decoder);
-
+    
     connect(decoder, &Decoder::onNewFrame, this, &Device::consumeNewFrame, Qt::DirectConnection);
 }
 
 Device::~Device()
 {
-
-    if (videoSocket)
-    {
-        videoSocket->close();
-    }
     stream->stopDecode();
-    videoBuffer->deInit();
-    delete action;
-    delete controller;
-    delete stream;
-    delete decoder;
-    delete videoBuffer;
-    delete frame;
+
 }
 
-QString Device::getDeviceName()
+const QString Device::getDeviceName()
 {
     return deviceName;
 }
 
 void Device::setVideoSocket(VideoSocket *videoSocket)
 {
+    stream->setDecoder(decoder.data());
     stream->setVideoSocket(videoSocket);
     stream->startDecode();
-    this->videoSocket = videoSocket;
 }
 
 void Device::setDeviceSocket(QTcpSocket *socket)
@@ -64,8 +45,9 @@ void Device::setDeviceSocket(QTcpSocket *socket)
 
 void Device::consumeNewFrame()
 {
+    auto videoBuffer = decoder->getVideoBuff();
     videoBuffer->lock();
-    auto AVFrame = videoBuffer->consumeRenderedFrame(AV_PIX_FMT_BGR24);
+    auto AVFrame = videoBuffer->consumeRenderedFrame(AV_PIX_FMT_RGB24);
     frame->data = AVFrame->data[0];
     frame->height = AVFrame->height;
     frame->width = AVFrame->width;
@@ -84,12 +66,12 @@ void Device::setDeviceName(QString deviceName)
     this->deviceName = deviceName;
 }
 
-Action *Device::getAction()
+std::shared_ptr<Action> Device::getAction()
 {
     return action;
 }
 
-const Frame *Device::getFrame()
+std::shared_ptr<Frame> Device::getFrame()
 {
     return frame;
 }

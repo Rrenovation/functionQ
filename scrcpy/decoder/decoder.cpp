@@ -3,11 +3,14 @@
 #include "decoder.h"
 #include "videobuffer.h"
 
-Decoder::Decoder(VideoBuffer *vb, QObject *parent) : QObject(parent), m_vb(vb)
+Decoder::Decoder(QObject *parent) : QObject(parent), m_vb(new VideoBuffer())
 {
+    m_vb->init();
 }
 
-Decoder::~Decoder() {}
+Decoder::~Decoder() {
+    m_vb->deInit();   
+}
 
 bool Decoder::open(const AVCodec *codec)
 {
@@ -112,15 +115,7 @@ void Decoder::pushFrame()
         qInfo() << "the previous newFrame will consume this frame!";
         return;
     }
-
-    //m_vb->lock();
-    //const AVFrame *m_pFrame = m_vb->consumeRenderedFrame();
-    //AVFrame *rgbFrame = avFrameConvertPixelFormat(m_pFrame, AV_PIX_FMT_BGR24);
-    //qInfo()<<"wait for consume frame !";
     emit onNewFrame();
-
-    //emit onNewFrame();
-    //m_vb->unLock();
 }
 
 AVFrame *Decoder::avFrameConvertPixelFormat(const AVFrame *src, AVPixelFormat dstFormat)
@@ -151,4 +146,9 @@ AVFrame *Decoder::avFrameConvertPixelFormat(const AVFrame *src, AVPixelFormat ds
     dst->height = src->height;
 
     return dst;
+}
+
+std::shared_ptr<VideoBuffer> Decoder::getVideoBuff() const
+{
+    return m_vb;
 }

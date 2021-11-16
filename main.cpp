@@ -20,10 +20,6 @@ public:
         qInfo() << "onNewFrame";
         auto frame = getFrame();
 
-        //获取控制对象        
-        auto action = getAction();
-        //返回桌面
-        action->goHome();
     }
 };
 
@@ -34,19 +30,20 @@ int main(int argc, char *argv[])
     Server mServer;
     myDevice device;
 
-    mServer.startServer();
+    qInfo() << mServer.startServer();
 
-    adbScrpy.setAdbPatch("/home/qtubuntu/Android/Sdk/platform-tools/adb");
-    adbScrpy.setSerial("12.168.1.47:5555");
+    adbScrpy.setAdbPatch("/usr/bin/adb");
+    adbScrpy.setSerial("127.0.0.1:6997");
 
-    autouimator.setAdbPatch("/home/qtubuntu/Android/Sdk/platform-tools/adb");
-    autouimator.setSerial("12.168.1.47:5555");
-
-    device.setDeviceName("12.168.1.47:5555");
+    autouimator.setAdbPatch("/usr/bin/adb");
+    autouimator.setSerial("127.0.0.1:6997");
+    device.setDeviceName("127.0.0.1:6997");
     mServer.pushDevice(&device);
 
-    while (!adbScrpy.autoConnect()) //自动连接
-        ;
+    // while (!adbScrpy.autoConnect()) //自动连接
+    // {
+    //     qInfo()<<"autoConnect";
+    // };
 
     qInfo()<<autouimator.uiautomator();
 

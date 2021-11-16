@@ -1,5 +1,7 @@
 #ifndef DECODER_H
 #define DECODER_H
+
+#include <memory>
 #include <QObject>
 
 #ifdef __cplusplus
@@ -19,13 +21,15 @@ class Decoder : public QObject
 {
     Q_OBJECT
 public:
-    Decoder(VideoBuffer *vb, QObject *parent = Q_NULLPTR);
+    Decoder(QObject *parent = Q_NULLPTR);
     virtual ~Decoder();
 
     bool open(const AVCodec *codec);
     void close();
     bool push(const AVPacket *packet);
     void interrupt();
+
+    std::shared_ptr<VideoBuffer> getVideoBuff() const;
 signals:
     void onNewFrame();
 protected:
@@ -33,7 +37,7 @@ protected:
     void pushFrame();
 
 private:
-    VideoBuffer *m_vb = Q_NULLPTR;
+    std::shared_ptr<VideoBuffer> m_vb;
     AVCodecContext *m_codecCtx = Q_NULLPTR;
     uint8_t *p_global_bgr_buffer = Q_NULLPTR;
     bool m_isCodecCtxOpen = false;

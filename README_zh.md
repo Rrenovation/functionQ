@@ -3,11 +3,11 @@
 
 functionQ 一个远程控制安卓设备的通用库。通过adb连接Android设备，获取图像数据和对设备控制。
 
-### library
+### Ubuntu 环境依赖
 ```shell
     apt install libavformat-dev libavcodec-dev libswresample-dev libswscale-dev libavutil-dev libsdl1.2-dev cmake qt5-default -y
 ```
-### compile
+### 编译
 ```shell
     git clone https://github.com/Rrenovation/functionQ.git
     cd functionQ
@@ -15,7 +15,7 @@ functionQ 一个远程控制安卓设备的通用库。通过adb连接Android设
     cmake ..
     make 
 ```
-### exmaple: main.cpp
+### 简单应用: main.cpp
 ```cpp
 #include <QCoreApplication>
 #include "../scrcpy/adbprocess.h"
@@ -39,10 +39,9 @@ public:
         qInfo() << "onNewFrame";
         auto frame = getFrame();
 
-
-        //get control obj       
+        //获取控制对象        
         auto action = getAction();
-        //simple control device 
+        //返回桌面
         action->goHome();
     }
 };
@@ -65,16 +64,15 @@ int main(int argc, char *argv[])
     device.setDeviceName("12.168.1.47:5555");
     mServer.pushDevice(&device);
 
-    while (!adbScrpy.autoConnect()) //autoConnect
+    while (!adbScrpy.autoConnect()) //自动连接
         ;
 
     qInfo()<<autouimator.uiautomator();
 
     return QApp->exec();
 }
-
 ````
-### start scrcpy-server on Android 
+### 启动 Android 控制软件
 ``` shell
     adb connect 127.0.0.1:6997
     adb -s 127.0.0.1:6997 push scrcpy-server /data/local/tmp/scrcpy-server

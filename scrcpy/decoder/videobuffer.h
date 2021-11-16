@@ -1,6 +1,5 @@
 #ifndef VIDEO_BUFFER_H
 #define VIDEO_BUFFER_H
-
 #include <QMutex>
 #include <QWaitCondition>
 
