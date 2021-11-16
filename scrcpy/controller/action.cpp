@@ -11,9 +11,9 @@ Action::~Action()
 {
 }
 
-void Action::setCtl(Controller *ctl)
+void Action::setCtl(Controller *_ctl)
 {
-    this->ctl = ctl;
+    ctl = QPointer<Controller>(_ctl);
     isSetCtl = true;
 }
 

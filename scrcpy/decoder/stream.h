@@ -54,6 +54,7 @@ private:
     AVCodecParserContext *m_parser = Q_NULLPTR;
     // successive packets may need to be concatenated, until a non-config
     // packet is available
+    const int HEADER_SIZE = 12;
     bool m_hasPending = false;
     AVPacket m_pending;
 };

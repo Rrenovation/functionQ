@@ -9,16 +9,16 @@ class myDevice : public Device
 private:
     /* data */
 public:
-    myDevice(/* args */)
-    {
-    }
-    ~myDevice()
-    {
-    }
+    myDevice(/* args */) = default;
+
     virtual void consumeFrame()
     {
         qInfo() << "onNewFrame";
         auto frame = getFrame();
+
+        qInfo()<<frame->height;
+        qInfo()<<frame->width;
+        qInfo()<<frame->data[1]<<frame->data[2]<<frame->data[3];
 
     }
 };
@@ -26,7 +26,7 @@ public:
 int main(int argc, char *argv[])
 {
     QCoreApplication *QApp = new QCoreApplication(argc, argv);
-    Adbprocess adbScrpy,autouimator;
+    Adbprocess adbScrpy;
     Server mServer;
     myDevice device;
 
@@ -35,17 +35,13 @@ int main(int argc, char *argv[])
     adbScrpy.setAdbPatch("/usr/bin/adb");
     adbScrpy.setSerial("127.0.0.1:6997");
 
-    autouimator.setAdbPatch("/usr/bin/adb");
-    autouimator.setSerial("127.0.0.1:6997");
     device.setDeviceName("127.0.0.1:6997");
     mServer.pushDevice(&device);
 
-    // while (!adbScrpy.autoConnect()) //自动连接
-    // {
-    //     qInfo()<<"autoConnect";
-    // };
-
-    qInfo()<<autouimator.uiautomator();
+    while (!adbScrpy.autoConnect()) //自动连接
+    {
+        qInfo() << "autoConnect";
+    };
 
     return QApp->exec();
 }

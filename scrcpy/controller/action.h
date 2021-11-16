@@ -10,7 +10,7 @@ class Action
 public:
     Action();
     virtual ~Action();
-    void setCtl(Controller *ctl);
+    void setCtl(Controller *_ctl);
     void sendText(QString text);
     void sendTextEx(QString text);
 
@@ -57,7 +57,7 @@ private:
     int lowestScroll = 150;
     int highestScroll = 350;
     bool isSetCtl;
-    Controller *ctl = nullptr;
+    QPointer<Controller> ctl;
 };
 
 #endif

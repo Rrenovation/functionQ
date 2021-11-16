@@ -9,9 +9,12 @@
 #include "./controller/controller.h"
 #include "./controller/action.h"
 
-Device::Device(QObject *parent) : QObject(parent), decoder(new Decoder()) ,stream( new Stream()),action(new Action),frame(new Frame())
+Device::Device(QObject *parent) : QObject(parent),
+                                  decoder(new Decoder()), stream(new Stream()),
+                                  controller(new Controller()), action(new Action),
+                                  frame(new Frame())
 {
-    
+
     connect(decoder, &Decoder::onNewFrame, this, &Device::consumeNewFrame, Qt::DirectConnection);
 }
 
@@ -28,18 +31,14 @@ const QString Device::getDeviceName()
 
 void Device::setVideoSocket(VideoSocket *videoSocket)
 {
-    stream->setDecoder(decoder.data());
+    stream->setDecoder(decoder);
     stream->setVideoSocket(videoSocket);
     stream->startDecode();
 }
 
 void Device::setDeviceSocket(QTcpSocket *socket)
 {
-    if (controller == Q_NULLPTR)
-    {
-        controller = new Controller();
-        action->setCtl(controller);
-    }
+    action->setCtl(controller);
     controller->setDeviceSocket(socket);
 }
 

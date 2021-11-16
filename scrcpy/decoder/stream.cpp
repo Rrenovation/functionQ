@@ -6,11 +6,7 @@
 #include "stream.h"
 #include "videosocket.h"
 
-#define BUFSIZE 0x10000
-#define HEADER_SIZE 12
 #define NO_PTS UINT64_MAX
-
-typedef qint32 (*ReadPacketFunc)(void *, quint8 *, qint32);
 
 Stream::Stream(QObject *parent) : QThread(parent)
 {
@@ -86,7 +82,7 @@ static quint64 bufferRead64be(quint8 *buf)
 
 void Stream::setVideoSocket(VideoSocket *videoSocket)
 {
-    m_videoSocket = videoSocket;
+    m_videoSocket = QPointer<VideoSocket>(videoSocket);
 }
 
 qint32 Stream::recvData(quint8 *buf, qint32 bufSize)
