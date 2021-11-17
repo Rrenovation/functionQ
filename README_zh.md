@@ -1,9 +1,19 @@
-#functionQ
-===========================
+# functionQ
+[English](README.md)
 
-functionQ 一个远程控制安卓设备的通用库。通过adb连接Android设备，获取图像数据和对设备控制。
-
-### Ubuntu 环境依赖
+用于远程控制Android设备的库。通过ADB连接Android设备，获取图像数据并控制设备。
+```
+*******************************************************************************************
+*******************************************************************************************
+**            *  --->adb approcess    *               *                  *               **
+**            *  <--------h264        *               *   encode----->   *               **
+** functionQ  *                       * scrcpy-server *                  *    android    **
+**            *  control-signal--->   *               *   control---->   *               **
+**            *  <--------clipboard   *               *                  *               ** 
+*******************************************************************************************
+*******************************************************************************************
+```
+### 依赖库
 ```shell
     apt install libavformat-dev libavcodec-dev libswresample-dev libswscale-dev libavutil-dev libsdl1.2-dev cmake qt5-default -y
 ```
@@ -15,7 +25,7 @@ functionQ 一个远程控制安卓设备的通用库。通过adb连接Android设
     cmake ..
     make 
 ```
-### 简单应用: main.cpp
+### exmaple: main.cpp
 ```cpp
 #include <QCoreApplication>
 #include "../scrcpy/adbprocess.h"
@@ -34,14 +44,14 @@ public:
     ~myDevice()
     {
     }
-    virtual void consumeFrame()
+    virtual void consumeFrame() //视频帧回调函数
     {
         qInfo() << "onNewFrame";
-        auto frame = getFrame();
+        auto frame = getFrame(); //获取  RGB24 图像数据帧
 
-        //获取控制对象        
+        //获取控制对象（生命周期由functionQ管理）     
         auto action = getAction();
-        //返回桌面
+        //简单应用，返回桌面
         action->goHome();
     }
 };
@@ -49,30 +59,28 @@ public:
 int main(int argc, char *argv[])
 {
     QCoreApplication *QApp = new QCoreApplication(argc, argv);
-    Adbprocess adbScrpy,autouimator;
+    Adbprocess adbScrpy;
     Server mServer;
     myDevice device;
 
-    mServer.startServer();
+    qInfo() << mServer.startServer();
 
-    adbScrpy.setAdbPatch("/home/qtubuntu/Android/Sdk/platform-tools/adb");
-    adbScrpy.setSerial("12.168.1.47:5555");
+    adbScrpy.setAdbPatch("/usr/bin/adb");
+    adbScrpy.setSerial("127.0.0.1:6997");
 
-    autouimator.setAdbPatch("/home/qtubuntu/Android/Sdk/platform-tools/adb");
-    autouimator.setSerial("12.168.1.47:5555");
-
-    device.setDeviceName("12.168.1.47:5555");
+    device.setDeviceName("127.0.0.1:6997");
     mServer.pushDevice(&device);
 
     while (!adbScrpy.autoConnect()) //自动连接
-        ;
-
-    qInfo()<<autouimator.uiautomator();
+    {
+        qInfo() << "autoConnect";
+    };
 
     return QApp->exec();
 }
+
 ````
-### 启动 Android 控制软件
+### 在Android启动 scrcpy-server 
 ``` shell
     adb connect 127.0.0.1:6997
     adb -s 127.0.0.1:6997 push scrcpy-server /data/local/tmp/scrcpy-server

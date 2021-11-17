@@ -1,8 +1,18 @@
-#functionQ
-===========================
+# functionQ
+[中文](README_zh.md)
 
-functionQ 一个远程控制安卓设备的通用库。通过adb连接Android设备，获取图像数据和对设备控制。
-
+A library for remote control of Android devices. Connect Android device through ADB to obtain image data and control the device.
+```
+*******************************************************************************************
+*******************************************************************************************
+**            *  --->adb approcess    *               *                  *               **
+**            *  <--------h264        *               *   encode----->   *               **
+** functionQ  *                       * scrcpy-server *                  *    android    **
+**            *  control-signal--->   *               *   control---->   *               **
+**            *  <--------clipboard   *               *                  *               ** 
+*******************************************************************************************
+*******************************************************************************************
+```
 ### library
 ```shell
     apt install libavformat-dev libavcodec-dev libswresample-dev libswscale-dev libavutil-dev libsdl1.2-dev cmake qt5-default -y
@@ -37,8 +47,7 @@ public:
     virtual void consumeFrame()
     {
         qInfo() << "onNewFrame";
-        auto frame = getFrame();
-
+        auto frame = getFrame(); //get the RGB24 Video Buffer
 
         //get control obj       
         auto action = getAction();
@@ -50,25 +59,22 @@ public:
 int main(int argc, char *argv[])
 {
     QCoreApplication *QApp = new QCoreApplication(argc, argv);
-    Adbprocess adbScrpy,autouimator;
+    Adbprocess adbScrpy;
     Server mServer;
     myDevice device;
 
-    mServer.startServer();
+    qInfo() << mServer.startServer();
 
-    adbScrpy.setAdbPatch("/home/qtubuntu/Android/Sdk/platform-tools/adb");
-    adbScrpy.setSerial("12.168.1.47:5555");
+    adbScrpy.setAdbPatch("/usr/bin/adb");
+    adbScrpy.setSerial("127.0.0.1:6997");
 
-    autouimator.setAdbPatch("/home/qtubuntu/Android/Sdk/platform-tools/adb");
-    autouimator.setSerial("12.168.1.47:5555");
-
-    device.setDeviceName("12.168.1.47:5555");
+    device.setDeviceName("127.0.0.1:6997");
     mServer.pushDevice(&device);
 
-    while (!adbScrpy.autoConnect()) //autoConnect
-        ;
-
-    qInfo()<<autouimator.uiautomator();
+    while (!adbScrpy.autoConnect()) 
+    {
+        qInfo() << "autoConnect";
+    };
 
     return QApp->exec();
 }
@@ -82,7 +88,7 @@ int main(int argc, char *argv[])
     adb -s 127.0.0.1:6997 shell CLASSPATH=/data/local/tmp/scrcpy-server app_process / com.genymobile.scrcpy.Server 1.18 info 0 20000000 4 -1 false - true true 0 false false - - 127.0.0.1:6997
 ```
 
-## 参考
+## Thinks
 ---
 [1] [scrcpy](https://github.com/Genymobile/scrcpy)
 [2] [QtScrcpy](https://github.com/barry-ran/QtScrcpy)
