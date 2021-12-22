@@ -19,13 +19,12 @@ public:
         qInfo()<<frame->height;
         qInfo()<<frame->width;
         qInfo()<<frame->data[1]<<frame->data[2]<<frame->data[3];
-
     }
 };
 
 int main(int argc, char *argv[])
 {
-    QCoreApplication *QApp = new QCoreApplication(argc, argv);
+    QCoreApplication QApp(argc, argv);
     Adbprocess adbScrpy;
     Server mServer;
     myDevice device;
@@ -43,5 +42,5 @@ int main(int argc, char *argv[])
         qInfo() << "autoConnect";
     };
 
-    return QApp->exec();
+    return QApp.exec();
 }
